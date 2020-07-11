@@ -1,12 +1,23 @@
 diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
-index 7ca24d5..c1b5253 100644
+index 7ca24d5..cb57ce8 100644
 --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
 +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/common.c
+@@ -79,8 +79,8 @@ static int brcmf_eap_restrict;
+ module_param_named(eap_restrict, brcmf_eap_restrict, int, 0400);
+ MODULE_PARM_DESC(eap_restrict, "Block non-802.1X frames until auth finished");
+ 
+-static int brcmf_sdio_wq_highpri;
+-module_param_named(sdio_wq_highpri, brcmf_sdio_wq_highpri, int, 0);
++static int brcmf_sdio_wq_highpri =1;
++module_param_named(sdio_wq_highpri, brcmf_sdio_wq_highpri, int, 0400);
+ MODULE_PARM_DESC(sdio_wq_highpri, "SDIO workqueue is set to high priority");
+ 
+ #ifdef DEBUG
 @@ -303,6 +303,7 @@ int brcmf_c_preinit_dcmds(struct brcmf_if *ifp)
  	strsep(&ptr, "\n");
  
  	/* Print fw version info */
-+	brcmf_info("Murata Customized Version: imx-sumo-manda_r1.0;\n");
++	brcmf_info("Murata Customized Version: imx-sumo-manda_r1.1;\n");
  	brcmf_info("Firmware version = %s\n", buf);
  
  	/* locate firmware version number for ethtool */
