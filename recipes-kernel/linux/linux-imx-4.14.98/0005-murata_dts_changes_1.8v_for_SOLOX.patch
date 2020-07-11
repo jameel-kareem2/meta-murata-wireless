@@ -1,0 +1,141 @@
+diff --git a/arch/arm/boot/dts/imx6sx-sdb-btwifi-m2.dtsi b/arch/arm/boot/dts/imx6sx-sdb-btwifi-m2.dtsi
+new file mode 100644
+index 00000000..dd890a9
+--- /dev/null
++++ b/arch/arm/boot/dts/imx6sx-sdb-btwifi-m2.dtsi
+@@ -0,0 +1,85 @@
++/*
++ * Copyright (C) 2015 Freescale Semiconductor, Inc.
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License version 2 as
++ * published by the Free Software Foundation.
++ */
++
++/*
++ * NOTE: This DTS file is written for plugging in Murata Wi-Fi/BT EVK into SD3
++ * slot using Murata i.MX InterConnect Ver 1.0 Adapter AND SD Card Extender on
++ * SD2 slot. Bluetooth UART connects via SD3 EMMC/MMC Plus pinout.
++ * WL_REG_ON/BT_REG_ON/WL_HOST_WAKE connect via SD Card Extender.
++ */
++
++/ {
++	modem_reset: modem-reset {
++		compatible = "gpio-reset";
++		reset-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
++		reset-delay-us = <1000>;
++		#reset-cells = <0>;
++	};
++
++	usdhc2_pwrseq: usdhc2_pwrseq {
++		compatible = "mmc-pwrseq-simple";
++		reset-gpios = <&gpio2 4 GPIO_ACTIVE_LOW>;  /* currently not implemented */
++	};
++};
++
++&iomuxc {
++	imx6sx-sdb-murata-wifibt {
++		pinctrl_bt: btgrp {
++			fsl,pins = <
++				MX6SX_PAD_NAND_DATA06__GPIO4_IO_10	0x13069 /* BT_REG_ON */
++			>;
++		};
++
++		pinctrl_wifi: wifigrp {
++			fsl,pins = <
++				/* Murata Module control signals -- not connected (R327 and need to disable ENET1 CLK) */
++				MX6SX_PAD_ENET1_RX_CLK__GPIO2_IO_4	0x13069 /* WL_REG_ON */
++			>;
++		};
++	};
++};
++
++&fec1 {
++	status = "disabled";
++};
++
++
++&uart5 { /* for bluetooth */
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart5 &pinctrl_bt>;
++	uart-has-rtscts;
++	resets = <&modem_reset>;
++	status = "okay";
++	/* for DTE mode, add below change */
++	/* fsl,dte-mode;*/
++	/* pinctrl-0 = <&pinctrl_uart5dte_1>; */
++};
++
++
++&usdhc2 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc2 &pinctrl_wifi>;
++	pinctrl-1 = <&pinctrl_usdhc2_100mhz &pinctrl_wifi>;
++	pinctrl-2 = <&pinctrl_usdhc2_200mhz &pinctrl_wifi>;
++	keep-power-in-suspend;
++	bus-width = <4>;
++        max-frequency = <132000000>; /* jameel - added for SoloX for testing 1MW */
++	non-removable;
++	mmc-pwrseq = <&usdhc2_pwrseq>;
++	pm-ignore-notify;
++	cap-power-off-card;
++	status = "okay";
++
++	brcmf: bcrmf@1 {
++		reg = <1>;
++		compatible = "brcm,bcm4329-fmac";
++	};
++};
++
+diff --git a/arch/arm/boot/dts/imx6sx-sdb.dtsi b/arch/arm/boot/dts/imx6sx-sdb.dtsi
+index 156c413..003a037 100644
+--- a/arch/arm/boot/dts/imx6sx-sdb.dtsi
++++ b/arch/arm/boot/dts/imx6sx-sdb.dtsi
+@@ -1018,15 +1018,38 @@
+ 
+ 		pinctrl_usdhc2: usdhc2grp {
+ 			fsl,pins = <
+-				MX6SX_PAD_SD2_CMD__USDHC2_CMD		0x17059
+-				MX6SX_PAD_SD2_CLK__USDHC2_CLK		0x10059
+-				MX6SX_PAD_SD2_DATA0__USDHC2_DATA0	0x17059
+-				MX6SX_PAD_SD2_DATA1__USDHC2_DATA1	0x17059
+-				MX6SX_PAD_SD2_DATA2__USDHC2_DATA2	0x17059
+-				MX6SX_PAD_SD2_DATA3__USDHC2_DATA3	0x17059
++				MX6SX_PAD_SD2_CMD__USDHC2_CMD		0x17069  /* Murata - default is 0x17059 including data lines */  
++				MX6SX_PAD_SD2_CLK__USDHC2_CLK		0x10071  /* Murata - default is 0x10059 */
++				MX6SX_PAD_SD2_DATA0__USDHC2_DATA0	0x17069
++				MX6SX_PAD_SD2_DATA1__USDHC2_DATA1	0x17069
++				MX6SX_PAD_SD2_DATA2__USDHC2_DATA2	0x17069
++				MX6SX_PAD_SD2_DATA3__USDHC2_DATA3	0x17069
+ 			>;
+ 		};
+ 
++		pinctrl_usdhc2_100mhz: usdhc2grp-100mhz {
++			fsl,pins = <
++				MX6SX_PAD_SD2_CMD__USDHC2_CMD		0x170b9
++				MX6SX_PAD_SD2_CLK__USDHC2_CLK		0x100b9
++				MX6SX_PAD_SD2_DATA0__USDHC2_DATA0	0x170b9
++				MX6SX_PAD_SD2_DATA1__USDHC2_DATA1	0x170b9
++				MX6SX_PAD_SD2_DATA2__USDHC2_DATA2	0x170b9
++				MX6SX_PAD_SD2_DATA3__USDHC2_DATA3	0x170b9
++			>;
++		};
++
++		pinctrl_usdhc2_200mhz: usdhc2grp-200mhz {
++			fsl,pins = <
++				MX6SX_PAD_SD2_CMD__USDHC2_CMD		0x170f9
++				MX6SX_PAD_SD2_CLK__USDHC2_CLK		0x100f9
++				MX6SX_PAD_SD2_DATA0__USDHC2_DATA0	0x170f9
++				MX6SX_PAD_SD2_DATA1__USDHC2_DATA1	0x170f9
++				MX6SX_PAD_SD2_DATA2__USDHC2_DATA2	0x170f9
++				MX6SX_PAD_SD2_DATA3__USDHC2_DATA3	0x170f9
++			>;
++		};
++
++
+ 		pinctrl_usdhc3: usdhc3grp {
+ 			fsl,pins = <
+ 				MX6SX_PAD_SD3_CMD__USDHC3_CMD		0x17069
+

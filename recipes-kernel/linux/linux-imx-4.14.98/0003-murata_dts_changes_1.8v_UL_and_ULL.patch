@@ -1,46 +1,141 @@
-diff --git a/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi b/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi
-index a2958fb..71f8f45 100644
---- a/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi
-+++ b/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi
-@@ -34,6 +34,17 @@
- 			MX6UL_PAD_SNVS_TAMPER1__GPIO5_IO01 0x03029
- 		>;
+diff --git a/arch/arm/boot/dts/imx6ul-14x14-evk.dts b/arch/arm/boot/dts/imx6ul-14x14-evk.dts
+index d61ce36..4ac70e3 100644
+--- a/arch/arm/boot/dts/imx6ul-14x14-evk.dts
++++ b/arch/arm/boot/dts/imx6ul-14x14-evk.dts
+@@ -202,21 +202,15 @@
  	};
-+
-+	/* Murata: define UART2 for 1.8V signaling to match WLAN SDIO VIO. */
-+	pinctrl_uart2_1_8v: uart2grp_1_8v {
-+		fsl,pins = <
-+			MX6UL_PAD_UART2_TX_DATA__UART2_DCE_TX	0x4001b0b1
-+			MX6UL_PAD_UART2_RX_DATA__UART2_DCE_RX	0x4001b0b1
-+			MX6UL_PAD_UART3_RX_DATA__UART2_DCE_RTS	0x4001b0b1
-+			MX6UL_PAD_UART3_TX_DATA__UART2_DCE_CTS	0x4001b0b1
-+		>;
-+	};
-+
  };
  
- &reg_sd1_vmmc {
-@@ -41,17 +52,21 @@
++/* Murata: need to redefine FEC1 and FEC2 constructs to keep MDIO declarations independent. 
++ * Needed by OOB IRQ functionality - see imx6ul-evk-btwifi-oob.dtsi 
++ */
+ &fec1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_enet1>;
+ 	phy-mode = "rmii";
+ 	phy-handle = <&ethphy0>;
+ 	status = "okay";
+-};
+-
+-&fec2 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_enet2>;
+-	phy-mode = "rmii";
+-	phy-handle = <&ethphy1>;
+-	status = "okay";
+-
+ 	mdio {
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+@@ -228,6 +222,18 @@
+ 			clocks = <&clks IMX6UL_CLK_ENET_REF>;
+ 			clock-names = "rmii-ref";
+ 		};
++	};
++};
++
++&fec2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_enet2>;
++	phy-mode = "rmii";
++	phy-handle = <&ethphy1>;
++	status = "okay";
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
+ 
+ 		ethphy1: ethernet-phy@1 {
+ 			compatible = "ethernet-phy-ieee802.3-c22";
+diff --git a/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi b/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi
+index a2958fb..b640a33 100644
+--- a/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi
++++ b/arch/arm/boot/dts/imx6ul-evk-btwifi.dtsi
+@@ -21,8 +21,6 @@
+ 	};
+ 
+ 	usdhc1_pwrseq: usdhc1_pwrseq {
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_wifi>;
+ 		compatible = "mmc-pwrseq-simple";
+ 		reset-gpios = <&gpio5 1 GPIO_ACTIVE_LOW>;
+ 	};
+@@ -31,7 +29,7 @@
+ &iomuxc {
+ 	pinctrl_wifi: wifigrp {
+ 		fsl,pins = <
+-			MX6UL_PAD_SNVS_TAMPER1__GPIO5_IO01 0x03029
++			MX6UL_PAD_SNVS_TAMPER1__GPIO5_IO01 0x03029  /* WL_REG_ON */
+ 		>;
+ 	};
+ };
+@@ -41,15 +39,18 @@
  };
  
  &uart2 {
-+	pinctrl-0 = <&pinctrl_uart2_1_8v>;  /* re-declare UART2 for 1.8V VIO signaling */
- 	resets = <&modem_reset>;
+-	resets = <&modem_reset>;
++	resets = <&modem_reset>;  /* Murata - add so BT_REG_ON is driven high during kernel boot */
  };
  
  &usdhc1 {
  	#address-cells = <1>;
  	#size-cells = <0>;
 -	pinctrl-names = "default";
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz"; /* Murata -- add 100 and 200 Mhz entries for UHS mode */
- 	pinctrl-0 = <&pinctrl_usdhc1>;
+-	pinctrl-0 = <&pinctrl_usdhc1>;
 -	no-1-8-v;
++	pinctrl-names = "default", "state_100mhz", "state_200mhz"; /* Murata -- add 100 and 200 Mhz entries for UHS mode */
++	pinctrl-0 = <&pinctrl_usdhc1 &pinctrl_wifi>;
 +	pinctrl-1 = <&pinctrl_usdhc1_100mhz &pinctrl_wifi>;
 +	pinctrl-2 = <&pinctrl_usdhc1_200mhz &pinctrl_wifi>;
 +//	no-1-8-v; /* Murata - comment out for UHS mode */
++	max-frequency = <132000000>; /* Murata - 6ULL MAX with Adapter; 6UL = 100 MHz MAX */
  	non-removable;
  	pm-ignore-notify;
-+	wifi-host;
  	mmc-pwrseq = <&usdhc1_pwrseq>;
- 	cap-power-off-card;
+diff --git a/arch/arm/boot/dts/imx6ull-14x14-evk.dts b/arch/arm/boot/dts/imx6ull-14x14-evk.dts
+index 99d0046..a3c066c 100644
+--- a/arch/arm/boot/dts/imx6ull-14x14-evk.dts
++++ b/arch/arm/boot/dts/imx6ull-14x14-evk.dts
+@@ -167,12 +167,27 @@
+ 	};
+ };
  
++/* Murata: need to redefine FEC1 and FEC2 constructs to keep MDIO declarations independent. 
++ * Needed by OOB IRQ functionality - see imx6ul-evk-btwifi-oob.dtsi 
++ */
+ &fec1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_enet1>;
+ 	phy-mode = "rmii";
+ 	phy-handle = <&ethphy0>;
+ 	status = "okay";
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		ethphy0: ethernet-phy@2 {
++			compatible = "ethernet-phy-ieee802.3-c22";
++			reg = <2>;
++			micrel,led-mode = <1>;
++			clocks = <&clks IMX6UL_CLK_ENET_REF>;
++			clock-names = "rmii-ref";
++		};
++	};
+ };
+ 
+ &fec2 {
+@@ -186,14 +201,6 @@
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 
+-		ethphy0: ethernet-phy@2 {
+-			compatible = "ethernet-phy-ieee802.3-c22";
+-			reg = <2>;
+-			micrel,led-mode = <1>;
+-			clocks = <&clks IMX6UL_CLK_ENET_REF>;
+-			clock-names = "rmii-ref";
+-		};
+-
+ 		ethphy1: ethernet-phy@1 {
+ 			compatible = "ethernet-phy-ieee802.3-c22";
+ 			reg = <1>;
+
