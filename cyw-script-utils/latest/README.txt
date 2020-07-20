@@ -32,4 +32,24 @@ NOTE: the final "bitbake" command will take hours to complete.
 Open a terminal in desired i.MX Yocto build folder, and run the command: 
 $./Murata_Wireless_Yocto_Build.sh
 
+Kernel release	NXP documentation link	Yocto code name	FMAC code name
+5.4.24_2.1.0	Yocto Project User’s Guide
+i.MX Linux User’s Guide
+i.MX Linux Reference Manual
+i.MX Linux Release Notes
+Zeus	Zigra
+4.14.98_2.3.0	Rev. L4.14.98_2.3.0_BSP
+Sumo	Kong, Zigra
+4.14.98_2.0.0	Rev. L4.14.98_2.0.0_BSP
+Sumo	Manda
+4.9.123_2.3.0	Rev. L4.9.123_2.3.0_8MMini_GA
+Rocko Mini	Manda, Kong, Zigra
+4.9.88_2.0.0	Rev. L4.9.88_2.0.0_BSP
+Rocko	Mothra, Manda
+4.9.11_1.0.0	Rev. L4.9.11_1.0.0_BSP
+Morty	Orga, Battra, Mothra, Manda
+4.1.15_2.0.0	Rev. L4.1.15_2.0.0_BSP
+Krogoth	Orga, Battra, Mothra, Manda
+
+
 
