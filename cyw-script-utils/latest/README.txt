@@ -35,17 +35,33 @@ $./Murata_Wireless_Yocto_Build.sh
 Following table provides the stable release information.
 =======================================================
 
-----------------------------------------------------------------------
-| Kernel release | Yocto code name  |  FMAC code name                |
-|--------------------------------------------------------------------|
-| 5.4.24_2.1.0   | Zeus             |  Zigra                         |
-| 4.14.98_2.3.0  | Sumo             |  Kong, Zigra                   |
-| 4.14.98_2.0.0  | Sumo             |  Manda                         |
-| 4.9.123_2.3.0  | Rocko Mini       |  Manda, Kong, Zigra            | 
-| 4.9.88_2.0.0   | Rocko            |  Mothra, Manda                 |
-| 4.9.11_1.0.0   | Morty            |  Orga, Battra, Mothra, Manda   |
-| 4.1.15_2.0.0   | Krogoth          |  Orga, Battra, Mothra, Manda   |
-----------------------------------------------------------------------
+------------------------------------------------------------------------------------
+| Kernel release | Yocto code name  |  FMAC code name |  Release information       |
+|----------------|------------------|-----------------|----------------------------|
+| 5.4.24_2.1.0   | Zeus             |  Zigra          |  imx-zeus-zigra_r1.0       |
+-----------------|------------------|-----------------|----------------------------|
+| 4.14.98_2.3.0  | Sumo             |  Zigra          |  imx-sumo-zigra_r1.0       |
+|                |                  |  Kong           |  imx-sumo-kong_r1.0        |
+-----------------|------------------|-----------------|----------------------------|
+| 4.14.98_2.0.0  | Sumo             |  Manda          |  imx-sumo-manda_r1.0       |
+-----------------|------------------|-----------------|----------------------------|
+| 4.9.123_2.3.0  | Rocko Mini       |  Zigra          |  imx-rocko-mini-zigra_r1.0 |
+|                |                  |  Kong           |  imx-rocko-mini-kong_r1.0  |                                       
+|                |                  |  Manda          |  imx-rocko-mini-manda_r1.0 |
+-----------------|------------------|-----------------|----------------------------|
+| 4.9.88_2.0.0   | Rocko            |  Mothra         |  imx-rocko-mothra_r1.0     |
+|                |                  |  Manda          |  imx-rocko-manda_r1.0      |
+-----------------|------------------|-----------------|----------------------------|
+| 4.9.11_1.0.0   | Morty            |  Orga           |  imx-morty-orga_r1.0       |
+|                |                  |  Battra         |  imx-morty-battra_r1.0     |                                        
+|                |                  |  Mothra         |  imx-morty-mothra_r1.0     |                                         
+|                |                  |  Manda          |  imx-morty-manda_r1.0      |                                          
+-----------------|------------------|-----------------|----------------------------|
+| 4.1.15_2.0.0   | Krogoth          |  Orga           |  imx-krogoth-orga_r1.0     |
+|                |                  |  Battra         |  imx-krogoth-battra_r1.0   |                                           
+|                |                  |  Mothra         |  imx-krogoth-mothra_r1.0   |                                           
+|                |                  |  Manda          |  imx-krogoth-manda_r1.0    |                                          
+------------------------------------------------------------------------------------
 
 
 
