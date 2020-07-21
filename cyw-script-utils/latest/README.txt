@@ -47,20 +47,20 @@ Following table provides the stable release information.
 -----------------|------------------|-----------------|----------------------------|
 | 4.9.123_2.3.0  | Rocko Mini       |  Zigra          |  imx-rocko-mini-zigra_r1.0 |
 |                |                  |  Kong           |  imx-rocko-mini-kong_r1.0  |                                       
-|                |                  |  Manda          |  imx-rocko-mini-manda_r1.0 |
+|                |                  |  Manda          |  imx-rocko-mini-manda_r2.1 |
 -----------------|------------------|-----------------|----------------------------|
-| 4.9.88_2.0.0   | Rocko            |  Mothra         |  imx-rocko-mothra_r1.0     |
-|                |                  |  Manda          |  imx-rocko-manda_r1.0      |
+| 4.9.88_2.0.0   | Rocko            |  Manda          |  imx-rocko-manda_r2.1      |
+|                |                  |  Mothra         |  imx-rocko-mothra_r1.1     |
 -----------------|------------------|-----------------|----------------------------|
-| 4.9.11_1.0.0   | Morty            |  Orga           |  imx-morty-orga_r1.0       |
-|                |                  |  Battra         |  imx-morty-battra_r1.0     |                                        
-|                |                  |  Mothra         |  imx-morty-mothra_r1.0     |                                         
-|                |                  |  Manda          |  imx-morty-manda_r1.0      |                                          
+| 4.9.11_1.0.0   | Morty            |  Manda          |  imx-morty-manda_r2.1      |
+|                |                  |  Mothra         |  imx-morty-mothra_r1.1     |                                        
+|                |                  |  Battra         |  imx-morty-battra_r1.1     |                                         
+|                |                  |  Orga           |  imx-morty-orga_r1.1       |                                          
 -----------------|------------------|-----------------|----------------------------|
-| 4.1.15_2.0.0   | Krogoth          |  Orga           |  imx-krogoth-orga_r1.0     |
-|                |                  |  Battra         |  imx-krogoth-battra_r1.0   |                                           
-|                |                  |  Mothra         |  imx-krogoth-mothra_r1.0   |                                           
-|                |                  |  Manda          |  imx-krogoth-manda_r1.0    |                                          
+| 4.1.15_2.0.0   | Krogoth          |  Manda          |  imx-krogoth-manda_r2.1    |
+|                |                  |  Mothra         |  imx-krogoth-mothra_r1.1   |                                           
+|                |                  |  Battra         |  imx-krogoth-battra_r1.2   |                                           
+|                |                  |  Orga           |  imx-krogoth-orga_r1.1     |                                          
 ------------------------------------------------------------------------------------
 
 
